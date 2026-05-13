@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIWIFA Ferretería - Materiales y Herramientas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Modal Boletín -->
+  <div id="boletinModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:9999; justify-content:center; align-items:center;">
+    <div style="position:relative; max-width:850px; width:95%; animation: fadeInUp 0.4s ease;">
+      <button id="cerrarBoletin" style="position:absolute; top:-20px; right:-20px; width:45px; height:45px; border-radius:50%; border:none; background:var(--danger-color); color:white; font-size:1.5rem; cursor:pointer; z-index:10; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px rgba(0,0,0,0.4); transition: transform 0.2s;">&times;</button>
+      <img id="boletinImagen" src="" alt="Boletín DIWIFA" style="width:100%; height:auto; border-radius:24px; box-shadow:0 30px 80px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.1);">
+    </div>
+  </div>
+
+  <!-- Navegación -->
+  <header>
+    <a href="pages/login.html" class="logo" style="text-decoration: none;" title="Acceso a Intranet">
+      <img src="assets/logo.png" alt="DIWIFA Logo" class="brand-logo">
+      DIWIFA<span>.</span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#info">Info Útil</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="inicio" class="hero">
+    <h1>Construye con confianza.</h1>
+    <p>En DIWIFA Ferretería encuentras las mejores herramientas, materiales de construcción y equipamiento industrial para llevar tus proyectos al siguiente nivel.</p>
+    <div class="hero-btns">
+      <a href="#catalogo" class="btn btn-primary"><i class="fa-solid fa-hard-hat"></i> Ver Catálogo</a>
+      <a href="#contacto" class="btn btn-outline">Cotizar Materiales</a>
+    </div>
+  </section>
+
+  <!-- Catálogo de Productos -->
+  <section id="catalogo" style="background: rgba(0,0,0,0.2);">
+    <h2 class="text-center">Nuestro Catálogo</h2>
+    <p class="text-center mb-4">Explora nuestros productos disponibles y precios actualizados.</p>
+    
+    <div id="categoryFilters" style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+      <button class="btn btn-primary filter-btn active" data-categoria="all">Todos</button>
+      <!-- Categorías dinámicas -->
+    </div>
+
+    <div id="productosGrid" class="catalog-grid">
+      <!-- Tarjetas de productos -->
+    </div>
+  </section>
+
+  <!-- Nosotros / Presentación -->
+  <section id="nosotros" class="text-center">
+    <h2>Nuestra Ferretería</h2>
+    <p>Más de 10 años brindando soluciones de calidad para profesionales y el hogar.</p>
+    
+    <div class="features">
+      <div class="glass-card">
+        <div class="feature-icon" style="color: var(--primary-color);"><i class="fa-solid fa-toolbox"></i></div>
+        <h3>Herramientas Profesionales</h3>
+        <p>Distribuidores oficiales de las mejores marcas de herramientas manuales y eléctricas.</p>
+      </div>
+      
+      <div class="glass-card">
+        <div class="feature-icon" style="color: var(--primary-color);"><i class="fa-solid fa-truck-fast"></i></div>
+        <h3>Envíos a Obra</h3>
+        <p>Llevamos tus materiales pesados directamente al lugar de construcción de forma rápida y segura.</p>
+      </div>
+      
+      <div class="glass-card">
+        <div class="feature-icon" style="color: var(--primary-color);"><i class="fa-solid fa-helmet-safety"></i></div>
+        <h3>Asesoramiento Experto</h3>
+        <p>Nuestro personal capacitado te ayudará a elegir exactamente lo que necesitas para tu proyecto.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Importante Section -->
+  <section id="info" style="background: rgba(0,0,0,0.2);">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <h2 class="text-center">Información Importante</h2>
+      <p class="text-center mb-4">Todo lo que necesitas saber antes de visitarnos.</p>
+      
+      <div class="glass-card" style="display: flex; flex-direction: column; gap: 1.5rem; text-align: left;">
+        <div>
+          <h4 style="color: var(--primary-color);"><i class="fa-regular fa-clock"></i> Horarios de Atención</h4>
+          <p style="margin: 0;">Lunes a Viernes: 07:00 AM - 06:00 PM</p>
+          <p style="margin: 0;">Sábados: 08:00 AM - 02:00 PM</p>
+          <p style="margin: 0; color: var(--danger-color);">Domingos y Feriados: Cerrado</p>
+        </div>
+        <div>
+          <h4 style="color: var(--primary-color);"><i class="fa-solid fa-location-dot"></i> Ubicación Principal</h4>
+          <p style="margin: 0;">Av. Industrial #450, Zona Comercial. Contamos con amplio parqueo para carga pesada.</p>
+        </div>
+        <div>
+          <h4 style="color: var(--primary-color);"><i class="fa-solid fa-credit-card"></i> Métodos de Pago</h4>
+          <p style="margin: 0;">Aceptamos efectivo, transferencias bancarias, Yape, Plin y todas las tarjetas de crédito sin recargo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto Section -->
+  <section id="contacto">
+    <div style="max-width: 600px; margin: 0 auto;" class="glass-card">
+      <h2 class="text-center">Contáctanos</h2>
+      <p class="text-center mb-4">¿Tienes alguna duda sobre diwifa? Escríbenos.</p>
+      
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" class="form-control" placeholder="Tu nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo Electrónico</label>
+          <input type="email" id="email" class="form-control" placeholder="tu@correo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Mensaje</label>
+          <textarea id="message" rows="4" class="form-control" placeholder="¿En qué te podemos ayudar?" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Mensaje</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 DIWIFA Ferretería. Todos los derechos reservados.</p>
+    <p><small>Materiales, Herramientas y Equipamiento</small></p>
+    <div class="visitas-badge" title="Contador de Visitas">
+      <i class="fa-solid fa-eye"></i> <span id="contadorVisitas">0</span> visitas
+    </div>
+  </footer>
+
+  <!-- Floating Social Buttons -->
+  <div class="social-floating">
+    <a href="https://www.facebook.com/" target="_blank" class="social-btn facebook-btn" title="Síguenos en Facebook">
+      <i class="fa-brands fa-facebook-f"></i>
+    </a>
+    <a href="https://wa.me/51998244133?text=Hola%20Ferreter%C3%ADa%20DIWIFA%2C%20quisiera%20hacer%20una%20consulta%20sobre%20un%20producto" target="_blank" class="social-btn whatsapp-btn" title="Escríbenos por WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+  </div>
+
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

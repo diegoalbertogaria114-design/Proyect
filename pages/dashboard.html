@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - DIWIFA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <img src="../assets/logo.png" alt="DIWIFA Logo" class="brand-logo"> DIWIFA<span>.</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item active">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="ventas.html" class="nav-item">
+          <i class="fa-solid fa-cart-shopping"></i> Punto de Venta
+        </a>
+        <a href="inventario.html" class="nav-item">
+          <i class="fa-solid fa-boxes-stacked"></i> Inventario
+        </a>
+        <a href="clientes.html" class="nav-item">
+          <i class="fa-solid fa-users"></i> Clientes
+        </a>
+        <a href="asistencia.html" class="nav-item">
+          <i class="fa-solid fa-clock"></i> Asistencia
+        </a>
+        
+        <!-- Elementos solo para admin -->
+        <div class="admin-only-container">
+          <hr style="border: 0; border-top: 1px solid var(--surface-border); margin: 1rem 0;">
+          <a href="empleados.html" class="nav-item admin-only">
+            <i class="fa-solid fa-user-tie"></i> Empleados
+          </a>
+                              <a href="reportes.html" class="nav-item admin-only">
+            <i class="fa-solid fa-file-invoice"></i> Reportes
+          </a>
+          <a href="mensajes.html" class="nav-item admin-only">
+            <i class="fa-solid fa-envelope"></i> Mensajes
+          </a>
+          <a href="configuracion.html" class="nav-item admin-only">
+            <i class="fa-solid fa-gear"></i> Configuración
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="#" id="logoutBtn" class="btn btn-outline" style="width: 100%; border-color: var(--danger-color); color: var(--danger-color);">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Salir
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div>
+          <h2 style="margin: 0; font-size: 1.5rem;">Panel de Control</h2>
+        </div>
+        
+        <div class="user-menu">
+          <div class="user-info text-right" style="text-align: right;">
+            <span class="user-name" id="displayUserName">Usuario</span>
+            <span class="badge badge-success user-role" id="displayUserRole">ROL</span>
+          </div>
+          <div class="user-avatar" id="displayUserAvatar">U</div>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content-area">
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="glass-card stat-card">
+            <div class="stat-icon primary"><i class="fa-solid fa-money-bill-wave"></i></div>
+            <div class="stat-details">
+              <h4>Ventas Totales</h4>
+              <div class="value" id="statVentas">$0.00</div>
+            </div>
+          </div>
+          
+          <div class="glass-card stat-card">
+            <div class="stat-icon success"><i class="fa-solid fa-box-open"></i></div>
+            <div class="stat-details">
+              <h4>Productos</h4>
+              <div class="value" id="statProductos">0</div>
+            </div>
+          </div>
+          
+          <div class="glass-card stat-card">
+            <div class="stat-icon warning"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-details">
+              <h4>Clientes</h4>
+              <div class="value" id="statClientes">0</div>
+            </div>
+          </div>
+
+          <div class="glass-card stat-card">
+            <div class="stat-icon danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="stat-details">
+              <h4>Alertas de Stock</h4>
+              <div class="value" id="statAlertas">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity (Ventas) -->
+        <div class="glass-card mt-4">
+          <h3 class="mb-3">Ventas Recientes</h3>
+          <div class="table-container">
+            <table id="ventasTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="4" class="text-center">No hay ventas registradas</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/db.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Proteger ruta
+      if (!auth.protect()) return;
+
+      // 2. Cargar info del usuario
+      const user = auth.getCurrentUser();
+      document.getElementById('displayUserName').textContent = user.nombre || user.username;
+      document.getElementById('displayUserRole').textContent = user.rol;
+      document.getElementById('displayUserAvatar').textContent = (user.nombre || user.username).charAt(0).toUpperCase();
+
+      // Mostrar elementos admin si corresponde
+      if (auth.isAdmin()) {
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('admin-only'));
+        // el selector de arriba tiene !important en display: none, debemos remover la clase mejor
+      }
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        auth.logout();
+      });
+
+      // 3. Cargar estadísticas
+      cargarEstadisticas();
+    });
+
+    function cargarEstadisticas() {
+      const ventas = db.get('ventas') || [];
+      const productos = db.get('productos') || [];
+      const clientes = db.get('clientes') || [];
+
+      // Ventas totales
+      const totalVentas = ventas.reduce((acc, v) => acc + (parseFloat(v.total) || 0), 0);
+      document.getElementById('statVentas').textContent = `$${totalVentas.toFixed(2)}`;
+
+      // Productos
+      document.getElementById('statProductos').textContent = productos.length;
+
+      // Clientes
+      document.getElementById('statClientes').textContent = clientes.length;
+
+      // Alertas de stock (stock < 5)
+      const alertas = productos.filter(p => parseInt(p.stock) < 5).length;
+      document.getElementById('statAlertas').textContent = alertas;
+
+      // Tabla de ventas recientes (últimas 5)
+      const tbody = document.querySelector('#ventasTable tbody');
+      if (ventas.length > 0) {
+        tbody.innerHTML = '';
+        const ventasRecientes = [...ventas].reverse().slice(0, 5);
+        ventasRecientes.forEach(v => {
+          // Obtener nombre del cliente
+          const cliente = clientes.find(c => c.id == v.clientId);
+          const nombreCliente = cliente ? cliente.nombre : 'Consumidor Final';
+          
+          tbody.innerHTML += `
+            <tr>
+              <td>#${String(v.id).padStart(5, '0')}</td>
+              <td>${new Date(v.fecha).toLocaleString()}</td>
+              <td>${nombreCliente}</td>
+              <td style="font-weight: bold; color: var(--success-color)">$${parseFloat(v.total).toFixed(2)}</td>
+            </tr>
+          `;
+        });
+      }
+    }
+  </script>
+</body>
+</html>
+

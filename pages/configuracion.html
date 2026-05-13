@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración - DIWIFA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <img src="../assets/logo.png" alt="DIWIFA Logo" class="brand-logo"> DIWIFA<span>.</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="ventas.html" class="nav-item">
+          <i class="fa-solid fa-cart-shopping"></i> Punto de Venta
+        </a>
+        <a href="inventario.html" class="nav-item">
+          <i class="fa-solid fa-boxes-stacked"></i> Inventario
+        </a>
+        <a href="clientes.html" class="nav-item">
+          <i class="fa-solid fa-users"></i> Clientes
+        </a>
+        <a href="asistencia.html" class="nav-item">
+          <i class="fa-solid fa-clock"></i> Asistencia
+        </a>
+        
+        <div class="admin-only-container">
+          <hr style="border: 0; border-top: 1px solid var(--surface-border); margin: 1rem 0;">
+          <a href="empleados.html" class="nav-item admin-only">
+            <i class="fa-solid fa-user-tie"></i> Empleados
+          </a>
+                              <a href="reportes.html" class="nav-item admin-only">
+            <i class="fa-solid fa-file-invoice"></i> Reportes
+          </a>
+          <a href="mensajes.html" class="nav-item admin-only">
+            <i class="fa-solid fa-envelope"></i> Mensajes
+          </a>
+          <a href="configuracion.html" class="nav-item active admin-only">
+            <i class="fa-solid fa-gear"></i> Configuración
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="#" id="logoutBtn" class="btn btn-outline" style="width: 100%; border-color: var(--danger-color); color: var(--danger-color);">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Salir
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <h2 style="margin: 0; font-size: 1.5rem;">Configuración de la Empresa</h2>
+        </div>
+        
+        <div class="user-menu">
+          <div class="user-info text-right" style="text-align: right;">
+            <span class="user-name" id="displayUserName">Usuario</span>
+            <span class="badge badge-success user-role" id="displayUserRole">ROL</span>
+          </div>
+          <div class="user-avatar" id="displayUserAvatar">U</div>
+        </div>
+      </header>
+
+      <div class="content-area">
+        <div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+          <h3 class="mb-4">Datos de la Empresa</h3>
+          <p class="mb-4 text-secondary">Estos datos aparecerán en las facturas y comprobantes generados por el sistema.</p>
+
+          <form id="configForm">
+            <div class="form-group">
+              <label for="empresaNombre">Nombre de la Empresa</label>
+              <input type="text" id="empresaNombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="empresaDireccion">Dirección</label>
+              <input type="text" id="empresaDireccion" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="empresaTelefono">Teléfono de Contacto</label>
+              <input type="text" id="empresaTelefono" class="form-control" required>
+            </div>
+
+            <div id="saveMsg" style="display:none; color: var(--success-color); margin-bottom: 1rem;">
+              <i class="fa-solid fa-check"></i> Configuración guardada correctamente.
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Guardar Cambios
+            </button>
+          </form>
+        </div>
+
+        <!-- Seccion Boletin -->
+        <div class="glass-card" style="max-width: 600px; margin: 2rem auto 0;">
+          <h3 class="mb-4"><i class="fa-solid fa-bullhorn"></i> Boletin / Pop-up</h3>
+          <p class="mb-4 text-secondary">Sube una imagen promocional que aparecera como popup al abrir la pagina principal.</p>
+
+          <div class="form-group">
+            <label>Estado del Boletin</label>
+            <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+              <button type="button" id="btnBoletinActivo" class="btn btn-outline" style="flex:1;">
+                <i class="fa-solid fa-eye"></i> Activado
+              </button>
+              <button type="button" id="btnBoletinInactivo" class="btn btn-outline" style="flex:1;">
+                <i class="fa-solid fa-eye-slash"></i> Desactivado
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="boletinImagen">Imagen del Boletin</label>
+            <input type="file" id="boletinImagen" accept="image/*" style="display:block; width:100%; padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid var(--surface-border); border-radius: 8px; color: var(--text-primary); cursor: pointer; margin-top: 0.5rem;">
+          </div>
+
+          <div id="boletinPreviewContainer" style="display:none; margin-bottom: 1rem; text-align:center;">
+            <p style="font-size:0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Vista previa:</p>
+            <img id="boletinPreview" src="" alt="Preview" style="max-width:100%; max-height:300px; border-radius:12px; border:2px solid var(--surface-border);">
+          </div>
+
+          <div id="boletinMsg" style="display:none; color: var(--success-color); margin-bottom: 1rem;">
+            <i class="fa-solid fa-check"></i> Boletin actualizado correctamente.
+          </div>
+
+          <button type="button" id="btnGuardarBoletin" class="btn btn-primary" style="width: 100%;">
+            <i class="fa-solid fa-save"></i> Guardar Boletin
+          </button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/db.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/configuracion.js"></script>
+</body>
+</html>
+

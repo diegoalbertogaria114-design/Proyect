@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mensajes - DIWIFA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    .mensaje-card {
+      padding: 1.5rem;
+      border-left: 4px solid var(--primary-color);
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .mensaje-card:hover {
+      transform: translateX(5px);
+    }
+    .mensaje-card.no-leido {
+      border-left-color: var(--warning-color);
+      background: rgba(245, 158, 11, 0.05);
+    }
+    .mensaje-card .msg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .mensaje-card .msg-nombre {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .mensaje-card .msg-fecha {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .mensaje-card .msg-correo {
+      font-size: 0.85rem;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+    .mensaje-card .msg-texto {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .msg-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      justify-content: flex-end;
+    }
+    .badge-nuevo {
+      background: var(--warning-color);
+      color: #000;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-secondary);
+    }
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <img src="../assets/logo.png" alt="DIWIFA Logo" class="brand-logo"> DIWIFA<span>.</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="ventas.html" class="nav-item">
+          <i class="fa-solid fa-cart-shopping"></i> Punto de Venta
+        </a>
+        <a href="inventario.html" class="nav-item">
+          <i class="fa-solid fa-boxes-stacked"></i> Inventario
+        </a>
+        <a href="clientes.html" class="nav-item">
+          <i class="fa-solid fa-users"></i> Clientes
+        </a>
+        <a href="asistencia.html" class="nav-item">
+          <i class="fa-solid fa-clock"></i> Asistencia
+        </a>
+        
+        <div class="admin-only-container">
+          <hr style="border: 0; border-top: 1px solid var(--surface-border); margin: 1rem 0;">
+          <a href="empleados.html" class="nav-item admin-only">
+            <i class="fa-solid fa-user-tie"></i> Empleados
+          </a>
+                    <a href="reportes.html" class="nav-item admin-only">
+            <i class="fa-solid fa-file-invoice"></i> Reportes
+          </a>
+          <a href="mensajes.html" class="nav-item active admin-only">
+            <i class="fa-solid fa-envelope"></i> Mensajes
+          </a>
+          <a href="configuracion.html" class="nav-item admin-only">
+            <i class="fa-solid fa-gear"></i> Configuración
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="#" id="logoutBtn" class="btn btn-outline" style="width: 100%; border-color: var(--danger-color); color: var(--danger-color);">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Salir
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div style="display: flex; align-items: center;">
+          <button class="mobile-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+          <h2 style="margin: 0; font-size: 1.5rem;">Bandeja de Mensajes</h2>
+        </div>
+        
+        <div class="user-menu">
+          <div class="user-info text-right" style="text-align: right;">
+            <span class="user-name" id="displayUserName">Usuario</span>
+            <span class="badge badge-success user-role" id="displayUserRole">ROL</span>
+          </div>
+          <div class="user-avatar" id="displayUserAvatar">U</div>
+        </div>
+      </header>
+
+      <div class="content-area">
+        
+        <div class="glass-card mb-4" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h3 style="margin: 0;">Mensajes de Contacto <span id="contadorNuevos"></span></h3>
+            <p style="margin: 0; font-size: 0.9rem;">Mensajes enviados por clientes desde la página principal.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button id="btnMarcarLeidos" class="btn btn-outline" title="Marcar todos como leídos">
+              <i class="fa-solid fa-check-double"></i> Marcar todos leídos
+            </button>
+            <button id="btnEliminarTodos" class="btn btn-outline" style="border-color: var(--danger-color); color: var(--danger-color);" title="Eliminar todos">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="mensajesContainer">
+          <!-- Mensajes generados por JS -->
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/db.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!auth.protect(true)) return;
+
+      const user = auth.getCurrentUser();
+      document.getElementById('displayUserName').textContent = user.nombre || user.username;
+      document.getElementById('displayUserRole').textContent = user.rol;
+      document.getElementById('displayUserAvatar').textContent = (user.nombre || user.username).charAt(0).toUpperCase();
+      document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('admin-only'));
+
+      const container = document.getElementById('mensajesContainer');
+
+      function renderMensajes() {
+        const mensajes = JSON.parse(localStorage.getItem('diwifa_mensajes') || '[]');
+        container.innerHTML = '';
+
+        // Contador de no leídos
+        const noLeidos = mensajes.filter(m => !m.leido).length;
+        const contadorEl = document.getElementById('contadorNuevos');
+        if (noLeidos > 0) {
+          contadorEl.innerHTML = '<span class="badge-nuevo">' + noLeidos + ' nuevo' + (noLeidos > 1 ? 's' : '') + '</span>';
+        } else {
+          contadorEl.innerHTML = '';
+        }
+
+        if (mensajes.length === 0) {
+          container.innerHTML = `
+            <div class="glass-card empty-state">
+              <i class="fa-solid fa-inbox"></i>
+              <h3>No hay mensajes</h3>
+              <p>Cuando un cliente envíe un mensaje desde la página principal, aparecerá aquí.</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Mostrar del más reciente al más antiguo
+        [...mensajes].reverse().forEach(m => {
+          const fecha = new Date(m.fecha);
+          const fechaStr = fecha.toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+
+          const div = document.createElement('div');
+          div.className = 'glass-card mensaje-card' + (m.leido ? '' : ' no-leido');
+          div.innerHTML = `
+            <div class="msg-header">
+              <div class="msg-nombre">
+                <i class="fa-solid fa-user-circle"></i> ${m.nombre}
+                ${!m.leido ? '<span class="badge-nuevo">Nuevo</span>' : ''}
+              </div>
+              <div class="msg-fecha"><i class="fa-regular fa-clock"></i> ${fechaStr}</div>
+            </div>
+            <div class="msg-correo"><i class="fa-solid fa-envelope"></i> ${m.correo}</div>
+            <div class="msg-texto">${m.mensaje}</div>
+            <div class="msg-actions">
+              ${!m.leido ? '<button class="btn btn-outline btn-leer" data-id="' + m.id + '" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;"><i class="fa-solid fa-eye"></i> Marcar leído</button>' : '<span class="badge badge-success" style="font-size: 0.75rem;"><i class="fa-solid fa-check"></i> Leído</span>'}
+              <button class="btn btn-outline btn-borrar" data-id="${m.id}" style="padding: 0.25rem 0.75rem; font-size: 0.85rem; border-color: var(--danger-color); color: var(--danger-color);"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+
+        // Eventos
+        document.querySelectorAll('.btn-leer').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.currentTarget.dataset.id);
+            const msgs = JSON.parse(localStorage.getItem('diwifa_mensajes') || '[]');
+            const msg = msgs.find(m => m.id === id);
+            if (msg) { msg.leido = true; }
+            localStorage.setItem('diwifa_mensajes', JSON.stringify(msgs));
+            renderMensajes();
+          });
+        });
+
+        document.querySelectorAll('.btn-borrar').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.currentTarget.dataset.id);
+            if (confirm('¿Eliminar este mensaje?')) {
+              let msgs = JSON.parse(localStorage.getItem('diwifa_mensajes') || '[]');
+              msgs = msgs.filter(m => m.id !== id);
+              localStorage.setItem('diwifa_mensajes', JSON.stringify(msgs));
+              renderMensajes();
+            }
+          });
+        });
+      }
+
+      // Marcar todos como leídos
+      document.getElementById('btnMarcarLeidos').addEventListener('click', () => {
+        const msgs = JSON.parse(localStorage.getItem('diwifa_mensajes') || '[]');
+        msgs.forEach(m => m.leido = true);
+        localStorage.setItem('diwifa_mensajes', JSON.stringify(msgs));
+        renderMensajes();
+      });
+
+      // Eliminar todos
+      document.getElementById('btnEliminarTodos').addEventListener('click', () => {
+        if (confirm('¿Estás seguro de eliminar TODOS los mensajes?')) {
+          localStorage.setItem('diwifa_mensajes', '[]');
+          renderMensajes();
+        }
+      });
+
+      renderMensajes();
+    });
+  </script>
+</body>
+</html>
